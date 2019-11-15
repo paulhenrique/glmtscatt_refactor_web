@@ -1,8 +1,3 @@
-# glmtscatt_refactor_web
-Adaptações e bibliotecas js adicionadas para execução da biblioteca glmtscatt em Web Applications
-
-#Integração
-A integração dessa biblioteca é dada pelos repositórios de @LVotto
 # glmtscatt_web
 
 Adaptações e bibliotecas js adicionadas para execução da biblioteca glmtscatt em _Web Applications_
