@@ -8,9 +8,10 @@ Created on Fri Nov 8 20:27:29 2019
 
 import numpy as np
 import matplotlib.pyplot as plt
-
 import field_components as fcs
-
+import base64 as b64
+import json
+import io 
 
 class SphericalElectricField:
     def __init__(self, wave_number, bscs={'TM': {}, 'TE': {}}):
@@ -68,7 +69,7 @@ class SphericalElectricField:
                - self.phi(radial, theta, phi) * np.sin(phi)
         return x_comp
     
-    def plot_r(self, r_max, sample=200):
+    def plot_r(self, r_max, sample=200, title=' '):
         rs = np.linspace(-r_max, r_max, sample)
         xs, zs = np.meshgrid(rs, rs)
         r = lambda x, z: np.sqrt(x ** 2 + z ** 2)
@@ -80,4 +81,12 @@ class SphericalElectricField:
         plt.ylabel('z [$\mu$m]')
         plt.imshow(grid.transpose(), extent=[-rr, rr, -rr, rr], cmap='inferno')
         plt.colorbar()
-        plt.show()
+        plt.title(title)
+        
+        #retornando em base64S
+        tmpfile = io.BytesIO()
+        plt.savefig(tmpfile, type='png')
+        base64_encoded = str(b64.b64encode(tmpfile.getvalue()))
+        base64_encoded = base64_encoded.replace('b', '', 1)
+        base64_encoded = base64_encoded[1:-1]
+        print(json.dumps({'title': title, 'data_img': base64_encoded }, sort_keys=True, indent=4))
