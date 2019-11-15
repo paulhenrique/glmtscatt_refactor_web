@@ -89,4 +89,4 @@ class SphericalElectricField:
         base64_encoded = str(b64.b64encode(tmpfile.getvalue()))
         base64_encoded = base64_encoded.replace('b', '', 1)
         base64_encoded = base64_encoded[1:-1]
-        print(json.dumps({'title': title, 'data_img': base64_encoded }, sort_keys=True, indent=4))
+        return json.dumps({'title': title, 'data_img': base64_encoded }, sort_keys=True, indent=4)
