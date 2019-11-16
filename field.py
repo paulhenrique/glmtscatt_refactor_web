@@ -5,7 +5,6 @@ Created on Fri Nov 8 20:27:29 2019
 @author: luizv
 """
 
-
 import numpy as np
 import matplotlib.pyplot as plt
 import field_components as fcs
