@@ -11,18 +11,15 @@ def tratar_entradas():
     titulo = str("Intensidade do campo Elétrico")
    
     if  len(sys.argv) == 1 :
-        print("Entre com parametros para o código")
+        return false
     else:
         if (sys.argv[1]) :
-            print("Resolução = " + sys.argv[1])
             resolucao = sys.argv[1]
             
         if(len(sys.argv) > 2):
-            print("title = " + sys.argv[2])
             titulo = sys.argv[2]
             
         if(len(sys.argv) > 3):
-            print("Axicon = " + sys.argv[3])
             wl = sys.argv[3]
    
     gerar_visualizacao_intensidade_campo_eletrico(resolucao = resolucao, titulo = titulo)
