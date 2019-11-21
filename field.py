@@ -81,6 +81,7 @@ class SphericalElectricField:
         plt.imshow(grid.transpose(), extent=[-rr, rr, -rr, rr], cmap='inferno')
         plt.colorbar()
         plt.title(title)
+    
         #retornando em base64S
         tmpfile = io.BytesIO()
         plt.savefig(tmpfile, type='png')

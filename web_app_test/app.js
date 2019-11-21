@@ -26,9 +26,6 @@ const server = http.createServer((req, res) => {
       res.end(python_code_text);
     });
   }
-  app.get('/user/:id/', function (req, res) {
-    res.send('user' + req.params.id);
-  });
 });
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
