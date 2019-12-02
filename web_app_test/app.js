@@ -6,6 +6,12 @@ const port = 3000;
 var app = express();
 var { exec } = require('child_process');
 
+app.get("/", (req,res) => {
+	 res.setHeader('Content-Type', 'text/html');
+	res.send("Entre com um valor de resolução e título para execução");
+
+});
+
 app.use("/exec/:sample/:title", (req, res) => {
   let sample = req.params.sample;
   let title = req.params.title;
