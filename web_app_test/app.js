@@ -1,28 +1,31 @@
 const http = require('http');
 var express = require('express');
+var fs = require('fs');
 const hostname = '127.0.0.1';
 const port = 3000;
 var app = express();
 var { exec } = require('child_process');
 
-app.use("/exec/:id/:sample/:title", (req, res) => {
-  let id = req.params.id;
+app.use("/exec/:sample/:title", (req, res) => {
   let sample = req.params.sample;
   let title = req.params.title;
   var python_code;
   var python_code_text;
-  var command = 'python3 ../middleware.py ' + sample + '';
+  var command = 'python3 ../middleware.py ' + sample + ' ' + title;
+  var path = '../tmp.json';
 
+  res.setHeader('Content-Type', 'text/html');
   exec(command, (err, stdout, stderr) => {
     if (err) {
       return;
     }
     python_code = JSON.parse(stdout);
     python_code_text = JSON.stringify(python_code);
-    // res.write('<img src="data:image/png;base64,' + python_code.data_img + '">');
-    // res.end(python_code_text);
+
+    res.write('<img src="data:image/png;base64,' + python_code.data_img + '">');
+    res.write(python_code_text);
   });
-  res.json([id, sample, title, command, python_code, python_code_text]);
+  // res.json([sample, title, command, python_code, python_code_text]);
 });
 
 // const server = http.createServer((req, res) => {
