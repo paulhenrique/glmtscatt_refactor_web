@@ -1,11 +1,10 @@
-
 const http = require('http');
 var express = require('express');
 var fs = require('fs');
 const hostname = '127.0.0.1';
 const port = 3000;
 var app = express();
-var { exec } = require('child_process');
+var spawn = require('child_process').spawn;
 
 app.get("/", (req, res) => {
   res.setHeader('Content-Type', 'text/html');
@@ -17,7 +16,11 @@ app.get("/", (req, res) => {
 });
 
 app.use("/exec/:sample/:title/:wl/:axicon", (req, res) => {
-  res.setHeader('Content-Type', 'text/html');
+  // res.setHeader('Content-Type', 'text/html');
+  res.setTimeout(120*60*1000, function () {
+    console.log('Request has timed out.');
+    res.send(408);
+  });
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
@@ -26,19 +29,28 @@ app.use("/exec/:sample/:title/:wl/:axicon", (req, res) => {
   let title = req.params.title;
   let wl = req.params.wl;
   let axicon = req.params.axicon;
-  var python_code;
-  var python_code_text;
-  var command = 'python3 ../middleware.py ' + sample + ' ' + title + ' ' + wl + ' ' + axicon;
-  var path = '../tmp.json'; i
-  exec(command, (err, stdout, stderr) => {
-    if (err) {
-      return;
-    }
+  var command = 'python3';
+  var folder = '../middleware.py';
+  var args = [folder, sample, title, wl, axicon];
+  command = 'python3';
+  const pythonSpawn = spawn(command, args);
+  pythonSpawn.stdin.setDefaultEncoding('utf-8');
+  pythonSpawn.stdout.setDefaultEncoding('utf-8');
 
-    python_code = JSON.parse(stdout);
-    python_code_text = JSON.stringify(python_code);
-    res.end(python_code_text);
+  var dataString = '';
+  pythonSpawn.stdout.on('data', (data) => {
+    // console.log(`pythonSpawn stdout:\n${data}`);
+    dataString += data.toString();
+    // res.end(JSON.parse(JSON.stringify(data.toString())));
   });
+  pythonSpawn.stdout.on('end', () => {
+    res.end(JSON.parse(JSON.stringify(dataString)));
+  });
+
+  pythonSpawn.stderr.on('data', (data) => {
+    console.error(`pythonSpawn stderr:\n${data}`);
+  });
+
 
 });
 app.listen(port, () => {
